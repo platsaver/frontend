@@ -6,8 +6,10 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Button, message } from 'antd';
+
 const { Header, Content, Footer, Sider } = Layout;
+
 function getItem(label, key, icon, children) {
   return {
     key,
@@ -16,6 +18,7 @@ function getItem(label, key, icon, children) {
     label,
   };
 }
+
 const items = [
   getItem('Option 1', '1', <PieChartOutlined />),
   getItem('Option 2', '2', <DesktopOutlined />),
@@ -24,22 +27,55 @@ const items = [
     getItem('Bill', '4'),
     getItem('Alex', '5'),
   ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
+  getItem('Team', 'sub2', <TeamOutlined />, [
+    getItem('Team 1', '6'),
+    getItem('Team 2', '8'),
+  ]),
   getItem('Files', '9', <FileOutlined />),
 ];
-const App = () => {
+
+const Admin = ({ username, onLogout }) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleLogoutClick = () => {
+    onLogout();
+    message.success('Logged out successfully');
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={value => setCollapsed(value)}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+        breakpoint="lg"
+      >
         <div className="demo-logo-vertical" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header
+          style={{
+            padding: '0 16px',
+            background: colorBgContainer,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ marginRight: '16px' }}>
+              Welcome, {username}
+            </span>
+            <Button type="primary" onClick={handleLogoutClick}>
+              Đăng xuất
+            </Button>
+          </div>
+        </Header>
         <Content style={{ margin: '0 16px' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>User</Breadcrumb.Item>
@@ -63,4 +99,5 @@ const App = () => {
     </Layout>
   );
 };
-export default App;
+
+export default Admin;

@@ -3,12 +3,11 @@ import { Button, Form, Input, message } from 'antd';
 import Admin from './Admin';
 import '@ant-design/v5-patch-for-react-19';
 
-const CheckPassword = ({ username, device_id, access_code }) => {
+const CheckPassword = ({ username, device_id, access_code, onLoginSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
-  // Đặt giá trị mặc định cho form từ props
   useEffect(() => {
     form.setFieldsValue({
       username,
@@ -20,7 +19,6 @@ const CheckPassword = ({ username, device_id, access_code }) => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      // Mã hóa mật khẩu bằng Base64
       const encodedPassword = btoa(unescape(encodeURIComponent(values.password)));
 
       const response = await fetch('http://localhost:3000/check-password', {
@@ -37,6 +35,10 @@ const CheckPassword = ({ username, device_id, access_code }) => {
 
       if (response.ok && !data.error) {
         message.success('Password verified successfully!');
+        // Lưu token vào localStorage
+        localStorage.setItem('token', data.token);
+        // Gọi onLoginSuccess để cập nhật trạng thái đăng nhập
+        onLoginSuccess({ user_id: data.user_id, username });
         setIsVerified(true);
       } else {
         message.error(data.error || 'Password verification failed!');
