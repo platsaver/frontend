@@ -34,28 +34,27 @@ const CheckUsername = ({ onNext }) => {
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/check-username', {
+      const response = await fetch('http://localhost:3000/check-username', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: values.username }),
+        body: JSON.stringify({ 
+          username: values.username, 
+          device_id: values.code 
+        }),
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
       const result = await response.json();
 
-      if (result.error) {
-        throw new Error(result.error);
+      if (!response.ok || result.error) {
+        throw new Error(result.error || 'Failed to check username');
       }
 
-      if (result.exists) {
-        message.success('Username exists! Proceeding...');
-        onNext(values.username); // Call onNext with username
-      } else {
-        message.error('Username not found!');
-      }
+      message.success('Username exists! Proceeding...');
+      onNext({ 
+        username: values.username, 
+        device_id: values.code, 
+        access_code: result.access_code 
+      });
     } catch (error) {
       console.error('API call failed:', error);
       message.error(error.message || 'Failed to check username!');

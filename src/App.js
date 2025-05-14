@@ -1,29 +1,26 @@
 import React, { useState } from 'react';
-import Admin from './Admin.jsx';
-import CheckUsername from './CheckUserName.jsx';
-import CheckPassword from './CheckPassword.jsx';
-import '@ant-design/v5-patch-for-react-19';
+import CheckUsername from './CheckUserName';
+import CheckPassword from './CheckPassword';
 
 const App = () => {
   const [step, setStep] = useState('username');
-  const [username, setUsername] = useState(''); // Store username
+  const [authData, setAuthData] = useState(null);
 
-  const handleUsernameNext = (username) => {
-    setUsername(username); // Save username
+  const handleNext = (data) => {
+    setAuthData(data);
     setStep('password');
-  };
-
-  const handlePasswordNext = () => {
-    setStep('admin');
   };
 
   return (
     <div>
-      {step === 'username' && <CheckUsername onNext={handleUsernameNext} />}
-      {step === 'password' && (
-        <CheckPassword username={username} onSuccess={handlePasswordNext} />
+      {step === 'username' && <CheckUsername onNext={handleNext} />}
+      {step === 'password' && authData && (
+        <CheckPassword
+          username={authData.username}
+          device_id={authData.device_id}
+          access_code={authData.access_code}
+        />
       )}
-      {step === 'admin' && <Admin />}
     </div>
   );
 };
