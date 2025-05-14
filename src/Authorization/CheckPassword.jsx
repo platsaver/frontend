@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Form, Input, message } from 'antd';
-import Admin from './Admin';
+import Admin from '../Admin';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { Row, Col } from 'react-bootstrap';
 import '@ant-design/v5-patch-for-react-19';
 
 const CheckPassword = ({ username, device_id, access_code, onLoginSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
+  const captchaRef = useRef(null);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -15,6 +19,10 @@ const CheckPassword = ({ username, device_id, access_code, onLoginSuccess }) => 
       accessCode: access_code,
     });
   }, [form, username, device_id, access_code]);
+
+  const handleCaptchaVerify = (token) => {
+    setCaptchaToken(token);
+  };
 
   const onFinish = async (values) => {
     setLoading(true);
@@ -28,6 +36,7 @@ const CheckPassword = ({ username, device_id, access_code, onLoginSuccess }) => 
           access_code: access_code,
           password: encodedPassword,
           device_id: device_id,
+          captchaToken: captchaToken
         }),
       });
 
@@ -48,6 +57,8 @@ const CheckPassword = ({ username, device_id, access_code, onLoginSuccess }) => 
       message.error('An error occurred during verification!');
     } finally {
       setLoading(false);
+      setCaptchaToken(null);
+      if (captchaRef.current) captchaRef.current.reset();
     }
   };
 
@@ -99,8 +110,20 @@ const CheckPassword = ({ username, device_id, access_code, onLoginSuccess }) => 
           <Input disabled />
         </Form.Item>
 
+        <Form.Item label="CAPTCHA">
+          <Row className="align-items-center">
+            <Col xs={12} sm={16} className="d-flex justify-content-start">
+              <ReCAPTCHA
+                ref={captchaRef}
+                sitekey="6LfRUTkrAAAAAFgrIFEm78EfmKAOdqg46IVZoB0x"
+                onChange={handleCaptchaVerify}
+              />
+            </Col>
+          </Row>
+        </Form.Item>
+
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit" loading={loading} disabled={!captchaToken}>
             Verify Password
           </Button>
         </Form.Item>

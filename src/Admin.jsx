@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
   TeamOutlined,
-  UserOutlined,
+  CheckSquareOutlined,
+  BarsOutlined
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button, message } from 'antd';
 
@@ -20,18 +18,19 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
+  getItem('Đối tác', 'sub1', <TeamOutlined />, [
+    getItem('Danh sách', '3'),
+    getItem('Nhân sự', '4')
   ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [
-    getItem('Team 1', '6'),
-    getItem('Team 2', '8'),
+  getItem('Tiêu chuẩn', 'sub2', <CheckSquareOutlined />, [
+    getItem('Bộ tiêu chuẩn', '5'),
+    getItem('Bộ chỉ số', '6')
   ]),
-  getItem('Files', '9', <FileOutlined />),
+  getItem('Vận hành', 'sub3', <BarsOutlined />, [
+    getItem('Hoạt động vật chất', '7'),
+    getItem('Sự kiện', '8'),
+    getItem('Báo cáo', '9')
+  ]),
 ];
 
 const Admin = ({ username, onLogout }) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import CheckUsername from './CheckUserName';
-import CheckPassword from './CheckPassword';
+import CheckUsername from './Authorization/CheckUserName';
+import CheckPassword from './Authorization/CheckPassword';
 import Admin from './Admin';
 
 const App = () => {
