@@ -5,6 +5,7 @@ import {
   BarsOutlined
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button, message } from 'antd';
+import PartnerList from './components/PartnerList.jsx';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,6 +36,8 @@ const items = [
 
 const Admin = ({ username, onLogout }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [selectedKey, setSelectedKey] = useState('3'); // Giá trị mặc định
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -53,7 +56,13 @@ const Admin = ({ username, onLogout }) => {
         breakpoint="lg"
       >
         <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={['3']}
+          mode="inline"
+          items={items}
+          onClick={(e) => setSelectedKey(e.key)} // Cập nhật `selectedKey` khi chọn tab
+        />
       </Sider>
       <Layout>
         <Header
@@ -88,7 +97,8 @@ const Admin = ({ username, onLogout }) => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Bill is a cat.
+            {selectedKey === '3' && <PartnerList />} 
+            {/* Chỉ hiển thị PartnerList khi chọn tab "Danh sách" */}
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
