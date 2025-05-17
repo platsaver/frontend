@@ -5,7 +5,7 @@ import {
   BarsOutlined
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button, message } from 'antd';
-import PartnerList from './components/PartnerList.jsx';
+import PartnerList from './Partner/PartnerList.jsx';
 
 const { Header, Content, Footer, Sider } = Layout;
 
