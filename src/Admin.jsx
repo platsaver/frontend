@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme, Button, message } from 'antd';
 import PartnerList from './Partner/PartnerList.jsx';
+import PartnerEmployee from './Partner/PartnerEmployee.jsx';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -55,13 +56,24 @@ const Admin = ({ username, onLogout }) => {
         onCollapse={(value) => setCollapsed(value)}
         breakpoint="lg"
       >
-        <div className="demo-logo-vertical" />
+        <div
+          style={{
+            height: '32px',
+            margin: '16px',
+            color: 'white',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            textAlign: 'center',
+          }}
+        >
+          Ant Design 
+        </div>
         <Menu
           theme="dark"
           defaultSelectedKeys={['3']}
           mode="inline"
           items={items}
-          onClick={(e) => setSelectedKey(e.key)} // Cập nhật `selectedKey` khi chọn tab
+          onClick={(e) => setSelectedKey(e.key)}
         />
       </Sider>
       <Layout>
@@ -94,7 +106,7 @@ const Admin = ({ username, onLogout }) => {
             }}
           >
             {selectedKey === '3' && <PartnerList />} 
-            {/* Chỉ hiển thị PartnerList khi chọn tab "Danh sách" */}
+            {selectedKey === '4' && <PartnerEmployee />} 
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
