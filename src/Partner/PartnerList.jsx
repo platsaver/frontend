@@ -186,8 +186,8 @@ const App = () => {
   ];
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Danh sách đối tác</h1>
+    <div >
+      <h1 style={{fontSize: '40px'}}>Danh sách đối tác</h1>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <Input placeholder="Tìm kiếm" />
         <Button type="primary" icon={<FaSearch />} />
