@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import Cookies from 'js-cookie';
 import '@ant-design/v5-patch-for-react-19';
 
 const CheckUsername = ({ onNext }) => {
@@ -10,23 +9,26 @@ const CheckUsername = ({ onNext }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const storedDeviceID = Cookies.get('deviceID');
+    // Check if deviceID exists in localStorage
+    const storedDeviceID = localStorage.getItem('deviceID');
 
     if (storedDeviceID) {
       setGeneratedCode(storedDeviceID);
       form.setFieldsValue({ code: storedDeviceID });
     } else {
+      // Generate new deviceID using FingerprintJS
       FingerprintJS.load()
         .then((fp) => fp.get())
         .then((result) => {
           const deviceID = result.visitorId;
           setGeneratedCode(deviceID);
-          Cookies.set('deviceID', deviceID);
+          localStorage.setItem('deviceID', deviceID); // Store in localStorage
           form.setFieldsValue({ code: deviceID });
         })
         .catch((error) => {
           console.error('Error generating fingerprint:', error);
           setGeneratedCode('Error generating code');
+          message.error('Failed to generate device ID');
         });
     }
   }, [form]);
