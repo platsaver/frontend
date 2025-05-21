@@ -11,7 +11,7 @@ import PartnerEmployee from './Partner/PartnerEmployee.jsx';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
+function getItem(label, key, icon, children) { 
   return {
     key,
     icon,
